@@ -10,14 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-model Post {
-  id Int @id @default(autoincrement())
-  title String
-  content String?
-  published Boolean @default(false)
-}
-
 enum ProfileRole {
   GUEST
   OPERATOR
@@ -25,25 +17,24 @@ enum ProfileRole {
 }
 
 model Profile {
-  id String @id @default(uuid())
-  userId String @unique
-  name String
-  email String @db.Text
-  role ProfileRole @default(GUEST)
+  id     String      @id @default(uuid())
+  userId String      @unique
+  name   String
+  email  String      @db.Text
+  role   ProfileRole @default(GUEST)
 
-  pemilikBarang Barang[]
+  products Product[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
 }
 
-model Barang {
-  id Int @id @default(autoincrement())
+model Product {
+  id   Int    @id @default(autoincrement())
   name String
 
   profileId String
-  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

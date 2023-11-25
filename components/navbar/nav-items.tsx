@@ -21,7 +21,7 @@ export const NavItems = ({
                 "underline-offset-8 hover:underline",
                 item.path === path && "underline"
               )}
-              href={"/"}
+              href={item.path}
             >
               {item.title}
             </Link>
