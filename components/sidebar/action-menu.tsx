@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { authUserSession } from "@/lib/auth-lib";
 
 import {
   Command,
@@ -14,9 +13,7 @@ import {
 } from "@/components/ui/command";
 import { DoorOpen, Outdent, SettingsIcon, UserCircle } from "lucide-react";
 
-export const ActionMenu = async () => {
-  const user = await authUserSession();
-
+export const ActionMenu = async ({ user }: { user: any }) => {
   const actionLabel = user ? "Sign Out" : "Sign In";
   const actionURL = user ? "/api/auth/signout" : "/api/auth/signin";
   const actionIcon = user ? (

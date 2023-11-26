@@ -1,9 +1,9 @@
 import { Sidebar } from "../sidebar/sidebar";
-import { ActionButton } from "./action-button";
 import { NavItems } from "./nav-items";
 import { Search } from "./search";
+import { auth } from "@/lib/auth-lib";
 
-export const Navbar = () => {
+export const Navbar = async () => {
   const items = [
     {
       title: "Home",
@@ -18,6 +18,8 @@ export const Navbar = () => {
       path: "/about",
     },
   ];
+  const user = await auth();
+
   return (
     <nav className=" w-full h-[100px] border-b-[1px] z-50 border-zinc-400   flex ">
       <div className=" flex gap-8 justify-between  items-center pt-8 w-full h-full">
@@ -29,7 +31,7 @@ export const Navbar = () => {
           <Search />
         </div>
         <div className=" pr-10">
-          <Sidebar />
+          <Sidebar session={user} />
         </div>
       </div>
     </nav>

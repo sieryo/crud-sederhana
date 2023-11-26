@@ -1,8 +1,10 @@
 import { getServerSession } from "next-auth";
-import { authOption } from "@/app/api/auth/[[...nextauth]]/route";
+import { authOptions } from "@/app/api/auth/[[...nextauth]]/route";
+import { getSession } from "next-auth/react";
+import { PrismaAdapter, } from "@next-auth/prisma-adapter";
 
-export const authUserSession = async() => {
-    const session = await getServerSession(authOption)
+export const auth = async() => {
+    const session = await getServerSession(authOptions)
 
     return session?.user
 }

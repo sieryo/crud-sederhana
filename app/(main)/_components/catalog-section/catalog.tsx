@@ -2,7 +2,7 @@ import { Post } from "@prisma/client";
 import { CatalogItems } from "./catalog-items";
 import { CatalogTime } from "./catalog-time";
 
-export const Catalog = ({ data }: { data: Post[] }) => {
+export const Catalog = () => {
   const times = [
     {
       titleTime: "Days",
@@ -32,7 +32,7 @@ export const Catalog = ({ data }: { data: Post[] }) => {
         <h1 className=" font-bold">Barang Populer</h1>
         <CatalogTime initialTime={times} />
       </div>
-      <CatalogItems data={data} />
+      <CatalogItems />
     </section>
   );
 };

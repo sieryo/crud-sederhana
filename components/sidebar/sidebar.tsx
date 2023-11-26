@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/sheet";
 import { SidebarMenu } from "./sidebar-menu";
 import { BoxIcon } from "lucide-react";
+import { ActionMenu } from "./action-menu";
 
 const sidebarItems = [
   {
@@ -17,7 +18,7 @@ const sidebarItems = [
   },
 ];
 
-export const Sidebar = () => {
+export const Sidebar = async ({ session }: { session: any }) => {
   return (
     <Sheet>
       <SheetTrigger>Sidebar</SheetTrigger>
@@ -26,6 +27,9 @@ export const Sidebar = () => {
           <SheetTitle>Gudang.</SheetTitle>
         </SheetHeader>
         <SidebarMenu items={sidebarItems} />
+        <div className=" w-full  mt-2">
+          <ActionMenu user={session} />
+        </div>
       </SheetContent>
     </Sheet>
   );
