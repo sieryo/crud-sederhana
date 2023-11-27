@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { LoaderIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export const ModalProductAdd = ({
   children,
@@ -31,6 +32,7 @@ export const ModalProductAdd = ({
   children: React.ReactNode;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
   const formSchema = z.object({
     name: z.string().min(3, {
       message: "name harus lebih dari 3 huruf",
@@ -63,6 +65,7 @@ export const ModalProductAdd = ({
       toast.success("Produk berhasil diajukan");
       setIsOpen(false);
       form.reset();
+      router.refresh();
     } catch (err) {
       console.log(err);
       toast.error("Produk gagal diajukan");
