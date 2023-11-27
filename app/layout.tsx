@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import SessionProvider from "@/components/providers/session-provider";
-import { getServerSession } from "next-auth";
-import AuthProvider from "@/components/providers/provider";
+import { Toaster } from "sonner";
 
 const inter = Poppins({
   subsets: ["latin"],
@@ -22,7 +20,10 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <Toaster position="top-right" expand={true} richColors />
+        {children}
+      </body>
     </html>
   );
 }

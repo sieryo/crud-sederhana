@@ -1,16 +1,30 @@
-import { Header } from "./_components/header/header";
-
-import { Content } from "./_components/content/content";
 import { auth } from "@/lib/auth-lib";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { HeaderPage } from "./_components/header/header-page";
+import { db } from "@/lib/db";
+import { Separator } from "@/components/ui/separator";
 
 const ProfilePage = async () => {
   const session = await auth();
 
-  console.log(session);
+  const userData = await db.user.findUnique({
+    where: {
+      id: session?.id,
+    },
+  });
+
   return (
     <div className=" w-full lg:pl-10">
-      <h1 className=" text-3xl">Profile</h1>
+      <HeaderPage>Profile</HeaderPage>
+      <div className="flex p-3">
+        <div className=" min-w-[300px] min-h-[300px] bg-slate-500"></div>
+        <div className=" pl-9 w-full">
+          <div>
+            <p className=" text-2xl">{userData?.name}</p>
+            <p className=" text-lg text-blue-600">{userData?.role}</p>
+          </div>
+          <Separator />
+        </div>
+      </div>
     </div>
   );
 };

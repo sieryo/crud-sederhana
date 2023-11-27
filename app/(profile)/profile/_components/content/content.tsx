@@ -6,7 +6,10 @@ export const Content = () => {
       title: "Profile",
       url: "/profile",
     },
-
+    {
+      title: "Your Products",
+      url: "/profile/products",
+    },
     {
       title: "Orders",
       url: "/profile/orders",

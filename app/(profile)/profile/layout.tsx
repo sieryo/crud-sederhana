@@ -1,8 +1,7 @@
-import { NavMenu } from "./_components/navbar/nav-menu";
 import { Navbar } from "./_components/navbar/navbar";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth-lib";
-import { Header } from "./_components/header/header";
+import { HeaderLayout } from "./_components/header/header-layout";
 import { Content } from "./_components/content/content";
 
 const ProfileLayout = async ({ children }: { children: React.ReactNode }) => {
@@ -14,7 +13,7 @@ const ProfileLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
       <Navbar />
-      <Header user={user} />
+      <HeaderLayout user={user} />
       <div className=" flex  p-10">
         <Content />
         {children}
