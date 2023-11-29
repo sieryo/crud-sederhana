@@ -4,6 +4,7 @@ import { ModalProductAdd } from "@/components/modals/modal-product-add";
 import { ProductUserList } from "../_components/products/productsUserList";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth-lib";
+import { PlusCircle } from "lucide-react";
 
 const ProfileProductsPage = async () => {
   const user = await auth();
@@ -18,7 +19,10 @@ const ProfileProductsPage = async () => {
     <div className=" w-full lg:pl-10">
       <HeaderPage>Your Products</HeaderPage>
       <ModalProductAdd>
-        <Button>Ajukan produk</Button>
+        <Button className=" mt-2">
+          <PlusCircle className=" mr-2 w-6" />
+          Ajukan produk
+        </Button>
       </ModalProductAdd>
       <ProductUserList products={products} />
     </div>

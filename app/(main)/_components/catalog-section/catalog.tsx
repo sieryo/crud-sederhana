@@ -1,27 +1,7 @@
-import { Post } from "@prisma/client";
 import { CatalogItems } from "./catalog-items";
-import { CatalogTime } from "./catalog-time";
+import { db } from "@/lib/db";
 
-export const Catalog = () => {
-  const times = [
-    {
-      titleTime: "Days",
-      time: "03",
-    },
-    {
-      titleTime: "Hours",
-      time: "20",
-    },
-    {
-      titleTime: "Minutes",
-      time: "25",
-    },
-    {
-      titleTime: "Seconds",
-      time: "55",
-    },
-  ];
-
+export const Catalog = async () => {
   return (
     <section className=" pt-10  min-h-[600px]">
       <div className=" flex gap-5 ">
@@ -30,7 +10,6 @@ export const Catalog = () => {
       </div>
       <div className=" text-2xl pt-2 items-end flex gap-12">
         <h1 className=" font-bold">Barang Populer</h1>
-        <CatalogTime initialTime={times} />
       </div>
       <CatalogItems />
     </section>

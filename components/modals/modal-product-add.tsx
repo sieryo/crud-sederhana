@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { LoaderIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Textarea } from "../ui/textarea";
 
 export const ModalProductAdd = ({
   children,
@@ -64,7 +65,6 @@ export const ModalProductAdd = ({
       setIsOpen(false);
       form.reset();
     } catch (err) {
-      console.log(err);
       toast.error("Produk gagal diajukan");
     }
   };
@@ -109,10 +109,10 @@ export const ModalProductAdd = ({
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input
-                      disabled={isSubmitting}
-                      placeholder="e.g. Kapan terakhir isi"
+                    <Textarea
+                      placeholder="e.g. Deskripsi produk ini...."
                       {...field}
+                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage />

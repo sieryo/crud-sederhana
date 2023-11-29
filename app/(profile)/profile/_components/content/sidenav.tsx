@@ -10,13 +10,14 @@ export const Sidenav = ({
   menus: { title: string; url: string }[];
 }) => {
   const path = usePathname();
+
   return (
     <div className=" lg:min-w-[250px] lg:min-h-[300px] border flex flex-col">
       {menus.map((menu, index) => (
         <Link
           className={cn(
             " w-full p-5 flex ",
-            menu.url === path && "border border-black border-b-2"
+            path.startsWith(menu.url) && "border border-black border-b-2"
           )}
           href={menu.url}
           key={menu.title}
