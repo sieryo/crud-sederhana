@@ -1,10 +1,10 @@
 import { HeaderPage } from "../_components/header/header-page";
 import { Button } from "@/components/ui/button";
 import { ModalProductAdd } from "@/components/modals/modal-product-add";
-import { ProductUserList } from "../_components/products/productsUserList";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth-lib";
 import { PlusCircle } from "lucide-react";
+import { ProductUserList } from "../_components/products/products-user-list";
 
 const ProfileProductsPage = async () => {
   const user = await auth();

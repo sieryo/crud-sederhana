@@ -23,7 +23,12 @@ export const CatalogItems = async () => {
         {products.map((product, index) => {
           const wishlisted = product.Wishlist[0]?.productId === product.id;
           return (
-            <Product wishlisted={wishlisted} item={product} key={product.id} />
+            <Product
+              userId={user.id}
+              wishlisted={wishlisted}
+              item={product}
+              key={product.id}
+            />
           );
         })}
       </div>
@@ -34,8 +39,14 @@ export const CatalogItems = async () => {
       <div className=" flex gap-3 overflow-x-auto p-3 mt-2">
         {products.map((product, index) => {
           const wishlisted = false;
+          const userId = undefined;
           return (
-            <Product wishlisted={wishlisted} item={product} key={product.id} />
+            <Product
+              userId={userId}
+              wishlisted={wishlisted}
+              item={product}
+              key={product.id}
+            />
           );
         })}
       </div>

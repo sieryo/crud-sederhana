@@ -6,9 +6,11 @@ import { auth } from "@/lib/auth-lib";
 export const Product = async ({
   item,
   wishlisted,
+  userId,
 }: {
   item: TypeProduct;
   wishlisted: boolean;
+  userId: string | undefined;
 }) => {
   const formattedPrice = formatRupiah(item.price);
 
@@ -18,7 +20,7 @@ export const Product = async ({
       <div className=" pt-3">
         <h3 className="  text-base">{item.name}</h3>
         <span className=" mt-1 block text-green-600">{formattedPrice}</span>
-        <Wishlist wishlisted={wishlisted} id={item.id} />
+        <Wishlist userId={userId} wishlisted={wishlisted} productId={item.id} />
       </div>
     </div>
   );

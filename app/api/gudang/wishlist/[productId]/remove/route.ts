@@ -30,6 +30,9 @@ export async function PATCH(
           userId: user?.id,
         },
       },
+      select: {
+        productId: true,
+      },
     });
 
     return NextResponse.json(removeWishlist);

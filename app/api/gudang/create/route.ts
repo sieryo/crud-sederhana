@@ -22,6 +22,11 @@ export async function POST(req: Request) {
         description,
         price,
       },
+      select: {
+        name: true,
+        description: true,
+        price: true,
+      },
     });
 
     return NextResponse.json(addItem);

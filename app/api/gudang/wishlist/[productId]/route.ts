@@ -29,6 +29,9 @@ export async function PATCH(
         userId: user?.id,
         productId: Number(params.productId),
       },
+      select: {
+        productId: true,
+      },
     });
 
     return NextResponse.json(wishlist);

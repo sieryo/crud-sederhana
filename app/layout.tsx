@@ -21,7 +21,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Toaster position="top-right" expand={true} richColors />
+        <Toaster
+          position="top-right"
+          expand={true}
+          visibleToasts={1}
+          richColors
+          closeButton
+        />
         {children}
       </body>
     </html>

@@ -2,51 +2,74 @@
 
 import { cn } from "@/lib/utils";
 import { Heart } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
 export const Wishlist = ({
-  id,
+  productId,
   wishlisted,
+  userId,
 }: {
-  id: number;
+  productId: number;
   wishlisted: boolean;
+  userId: string | undefined;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
-  const endpointAPI = wishlisted
-    ? `/api/gudang/wishlist/${id}/remove`
-    : `/api/gudang/wishlist/${id}`;
+  const [wishlist, setWishlist] = useState(wishlisted);
 
+  const endpointAPI = wishlist
+    ? `/api/gudang/wishlist/${productId}/remove`
+    : `/api/gudang/wishlist/${productId}`;
+
+  const successMessage = wishlist
+    ? "Product berhasil dihapus dari wishlist"
+    : "Product Berhasil di wishlist";
+  const errorMessage = userId
+    ? "Maaf ada error dari server, mohon coba lagi"
+    : "Silahkan Sign in terlebih dahulu";
+
+  const message = wishlist ? "Added to wishlist" : "Add to wishlist";
   const handleWishlist = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch(endpointAPI, {
-        method: "PATCH",
-      });
-      console.log(res);
-      if (res.status === 401) {
-        toast.error("Silahkan Sign in terlebih dahulu");
-      }
+      updateWishlist();
     } catch (err) {
-      console.log(err);
+      toast.error("Ada masalah dari sini, silahkan coba lagi");
     } finally {
-      setIsLoading(false);
     }
   };
+
+  const updateWishlist = () => {
+    const res = fetch(endpointAPI, {
+      method: "PATCH",
+    });
+    toast.promise(res, {
+      loading: "Loading...",
+      success: () => {
+        setIsLoading(false);
+        wishlist ? setWishlist(false) : setWishlist(true);
+        return `${successMessage}`;
+      },
+      error: () => {
+        setIsLoading(false);
+        return `${errorMessage}`;
+      },
+      duration: 1000,
+    });
+  };
+
   return (
     <div className=" text-base max-lg:text-sm flex gap-2 pt-2">
       <button onClick={handleWishlist} disabled={isLoading}>
         <Heart
           className={cn(
             " hover:fill-red-500 hover:text-transparent",
-            wishlisted && "fill-red-500 text-transparent",
-            isLoading && "opacity-50"
+            isLoading && "opacity-50 fill-red-500 text-transparent",
+            wishlist && "fill-red-500 text-transparent"
           )}
         />
       </button>
-      <span>Add to wishlist</span>
+      <span>{message}</span>
     </div>
   );
 };
