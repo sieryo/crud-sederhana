@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { AriaAttributes, useMemo, useState } from "react";
 import GridLayout, { Layout } from "react-grid-layout";
 import * as portals from "react-reverse-portal";
 import { Coba } from "../coba";
@@ -15,10 +15,22 @@ import {
 import { cn } from "@/lib/utils";
 
 export const GridDnd = () => {
-  const portalNode = useMemo(() => {
+  const portalNodes = useMemo(() => {
     return [
       {
         node: portals.createHtmlPortalNode(),
+        id: "profile",
+      },
+      {
+        node: portals.createHtmlPortalNode(),
+        id: "kotak",
+      },
+    ];
+  }, []);
+  const items = useMemo(() => {
+    return [
+      {
+        node: undefined,
         id: "",
         i: "0",
         show: false,
@@ -32,7 +44,7 @@ export const GridDnd = () => {
         maxH: 4,
       },
       {
-        node: portals.createHtmlPortalNode(),
+        node: undefined,
         id: "",
         i: "1",
         show: false,
@@ -47,9 +59,8 @@ export const GridDnd = () => {
       },
     ];
   }, []);
-  // Definisi layout grid
 
-  const [layout, setLayout] = useState(portalNode);
+  const [layout, setLayout] = useState(items);
 
   const handleOnDrag = (e: React.DragEvent, widgetType: string) => {
     e.dataTransfer.setData("widgetType", widgetType);
@@ -66,29 +77,34 @@ export const GridDnd = () => {
 
   const handleOnDrop = (e: React.DragEvent) => {
     const widgetType = e.dataTransfer.getData("widgetType");
-    const targetIndex = parseInt(e.currentTarget.getAttribute("data-index"));
+    const targetIndex = parseInt(
+      e.currentTarget.getAttribute("data-index") as string
+    );
 
-    const newLayout = layout.map((l, index) => {
+    const updatedLayout = layout.map((item, index) => {
       if (index === targetIndex) {
         return {
-          ...l,
+          ...item,
           show: true,
           id: widgetType,
-          node: portals.createHtmlPortalNode(),
+          node:
+            portalNodes.find((node) => node.id === widgetType)?.node ||
+            undefined,
         };
       }
-      return l;
+      return item;
     });
-    console.log(newLayout);
-    setLayout(newLayout);
+
+    console.log(updatedLayout);
+    setLayout(updatedLayout as any);
   };
 
   return (
     <>
-      <portals.InPortal node={portalNode[0].node}>
+      <portals.InPortal node={portalNodes[0].node}>
         <Coba />
       </portals.InPortal>
-      <portals.InPortal node={portalNode[1].node}>
+      <portals.InPortal node={portalNodes[1].node}>
         <Kotak />
       </portals.InPortal>
       <div>
@@ -160,7 +176,9 @@ export const GridDnd = () => {
                 key={index}
                 data-index={index}
               >
-                {item.show && <portals.OutPortal node={item.node} />}
+                {item.show && item?.node && (
+                  <portals.OutPortal node={item.node} />
+                )}
               </div>
             );
           })}
