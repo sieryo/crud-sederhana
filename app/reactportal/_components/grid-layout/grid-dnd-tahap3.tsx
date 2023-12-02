@@ -14,7 +14,26 @@ import {
 } from "@hello-pangea/dnd";
 import { cn } from "@/lib/utils";
 
-export const GridDnd = () => {
+type Items = {
+  node?: any;
+  id?: string;
+  i?: string;
+  x?: number;
+  y?: number;
+  w?: number;
+  h?: number;
+  isResizable?: boolean;
+  isBounded?: boolean;
+  maxW?: number;
+  maxH?: number;
+  show?: boolean;
+}[];
+
+export const GridDndThree = () => {
+  //! Harapan yang akan dicapai saat tahap 3:
+
+  // Bisa dynamic resize
+
   const portalNodes = useMemo(() => {
     return [
       {
@@ -27,7 +46,7 @@ export const GridDnd = () => {
       },
     ];
   }, []);
-  const items = useMemo(() => {
+  const items: Items = useMemo(() => {
     return [
       {
         node: undefined,
@@ -127,43 +146,108 @@ export const GridDnd = () => {
       <div>
         <GridLayout
           className="border"
-          layout={layout}
+          layout={layout as any}
           cols={12}
           rowHeight={150}
           width={1200}
-          // isDroppable={true}
-          // onDrop={(la, item, e: any) => {
-          //   const id = e.dataTransfer.getData("id") as string;
-          //   console.log(la);
-          //   const newLayout = layout.map((layout, index) => {
-          //     if (layout.id === id) {
-          //       return {
-          //         ...layout,
-          //         show: true,
-          //       };
-          //     }
-          //     return layout;
-          //   });
-          //   setLayout(newLayout);
-          // }}
-          onLayoutChange={(item) => {
-            console.log(item);
-            const newLayout = layout.map((l, i) => {
-              const newPosition = {
-                x: item[i].x,
-                y: item[i].y,
+          isDroppable={true}
+          droppingItem={{
+            i: "dropElement",
+            w: 2,
+            h: 2,
+          }}
+          onDrop={(la, item, e: any) => {
+            const widgetType = e.dataTransfer.getData("widgetType");
+            const targetIndex = parseInt(
+              e.currentTarget.getAttribute("data-index") as string
+            );
+            let newSize = {};
+
+            if (item.y > 0) {
+              newSize = {
+                h: 1,
+                w: 4,
               };
-              const newSize = {
-                w: item[i].w,
-                h: item[i].h,
+            }
+            const newItem = {
+              ...item,
+              ...newSize,
+              node:
+                portalNodes.find((node) => node.id === widgetType)?.node ||
+                undefined,
+              id: widgetType,
+              isResizable: true,
+              isBounded: true,
+              show: true,
+            };
+
+            console.log(newItem);
+
+            const newLayout = [...layout, newItem];
+
+            setLayout(newLayout);
+          }}
+          onDrag={(newLayout, oldItem, newItem, placeholder) => {
+            if (placeholder.y > 0) {
+              placeholder.h = 1;
+              placeholder.w = 4;
+            }
+            const updatedLayout = layout.map((item, index) => {
+              const newItem = {
+                x: newLayout[index].x,
+                y: newLayout[index].y,
               };
               return {
-                ...l,
-                ...newPosition,
+                ...item,
+                ...newItem,
+              };
+            });
+            console.log(updatedLayout);
+            // Set the updated layout
+
+            setLayout(updatedLayout);
+          }}
+          onResize={(newLayout) => {
+            const updatedLayout = layout.map((item, index) => {
+              const newSize = {
+                h: newLayout[index].h,
+                w: newLayout[index].w,
+              };
+              return {
+                ...item,
                 ...newSize,
               };
             });
-            setLayout(newLayout);
+            // Set the updated layout
+
+            setLayout(updatedLayout);
+          }}
+          onLayoutChange={(newLayout) => {
+            console.log(newLayout);
+            const updatedLayout = layout.map((item, index) => {
+              let newSize = {};
+              if (
+                newLayout[index].y > 0 &&
+                newLayout[index].i === "dropElement"
+              ) {
+                newSize = {
+                  h: 1,
+                  w: 4,
+                };
+              }
+              const newItem = {
+                x: newLayout[index].x,
+                y: newLayout[index].y,
+              };
+              return {
+                ...newSize,
+                ...item,
+                ...newItem,
+              };
+            });
+
+            // Set the updated layout
+            setLayout(updatedLayout);
           }}
         >
           {layout.map((item, index) => {
@@ -172,13 +256,12 @@ export const GridDnd = () => {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleOnDrop}
-                className={cn("", item.show && "bg-slate-200")}
+                className={cn(" bg-slate-200", item.show && "bg-slate-200")}
                 key={index}
+                data-grid={item}
                 data-index={index}
               >
-                {item.show && item?.node && (
-                  <portals.OutPortal node={item.node} />
-                )}
+                {item?.node && <portals.OutPortal node={item.node} />}
               </div>
             );
           })}
